@@ -1,6 +1,27 @@
 $( document ).ready(function() {
     console.log( "ready!" );
 
+    let cityname = "san francisco";
+    let APIKEY = 'c18d5d2e20b21d5580498fa1824aba22';
+    let queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + cityname + `&appid=${APIKEY}&units=imperial`;
+    // api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}
+
+    $.ajax({
+      url: queryURL,
+      method: "GET"
+    }).then(function(response) {
+      console.log(response);
+      console.log("City name: " + response.name);
+    //   need to confirm dt is date time, and how to convert it into something readable or just use dayjs
+    //   console.log(response.dt);
+    // need to see if temp can be converted into farenheight
+      console.log("Temperature Farenheit: " + response.main.temp);
+      console.log("Humidity: " + response.main.humidity);
+      console.log("Wind Speed: " + response.wind.speed);
+    //   need to find UV index
+    // need to find weather icon
+    });
+    
     $('.btn-city').on('click', function() {
         console.log($(this));
     })
@@ -9,14 +30,16 @@ $( document ).ready(function() {
 // I want to next complete an AJAX request that console logs a response
 /*
 That response must include:
+- city name
 - The date (if not, dayjs)
 - Temp (in Farenheit)
 - Humidity
 - Weather icon
 - Wind Speed
-- UV Index
+- UV Index (color coded for favorable, moderate, or severe)
 */
 
+// WHEN U OPEN WEATHER DASHBOARD IT POPULATES THE LAST SEARCHED CITY
 // I want to type a query that receives input from the input search and queries based on that q="city"
 // every time the search button is clicked, it acts as a to-do list and adds the city to the buttons field
 // every time the button field is updated, it should set these to local storage, probably from an array
