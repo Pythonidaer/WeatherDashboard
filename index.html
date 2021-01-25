@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <script src="https://unpkg.com/dayjs@1.8.21/dayjs.min.js"></script>
+    <script>dayjs().format()</script> -->
     <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js" integrity="sha384-LtrjvnR4Twt/qOuYxE721u19sVFLVSA4hf/rRt6PrZTmiPltdZcI7q7PXQBYTKyf" crossorigin="anonymous"></script>
@@ -41,7 +44,7 @@
                     <div class="col-12 border border-grey rounded p-3 py-4">
                         <!-- Needs cloud icon -->
                         <!-- Is actually today's forecast -->
-                        <h2 class="mb-4">Atlanta (8/15/2019)</h2>
+                        <h2 class="mb-4">Atlanta (<span id="current-date"></span>)</h2>
                         <p class="mb-4">Temperature: 90.9 F</p>
                         <p class="mb-4">Humidity: 41%</p>
                         <p class="mb-4">Wind Speed: 4.7 MPH</p>
@@ -54,31 +57,31 @@
                         </div>
 
                         <div class="col bg-primary mr-3 py-3 rounded">
-                            <h3 class="text-white h4 mb-3">8/16/2019</h3>
+                            <h3 id="forecast-d1" class="text-white h4 mb-3"></h3>
                             <p class="mb-2">☀️</p>
                             <p class="text-white">Temp: 86.84 F</p>
                             <p class="text-white mb-0">Humidity: 43%</p>
                         </div>
                         <div class="col bg-primary mr-3 py-3 rounded">
-                            <h3 class="text-white h4 mb-3">8/17/2019</h3>
+                            <h3 id="forecast-d2" class="text-white h4 mb-3"></h3>
                             <p class="mb-2">☀️</p>
                             <p class="text-white">Temp: 91.38 F</p>
                             <p class="text-white mb-0">Humidity: 33%</p>
                         </div>
                         <div class="col bg-primary mr-3 py-3 rounded">
-                            <h3 class="text-white h4 mb-3">8/18/2019</h3>
+                            <h3 id="forecast-d3" class="text-white h4 mb-3"></h3>
                             <p class="mb-2">☀️</p>
                             <p class="text-white">Temp: 88.46 F</p>
                             <p class="text-white mb-0">Humidity: 37%</p>
                         </div>
                         <div class="col bg-primary mr-3 py-3 rounded">
-                            <h3 class="text-white h4 mb-3">8/19/2019</h3>
+                            <h3 id="forecast-d4" class="text-white h4 mb-3"></h3>
                             <p class="mb-2">⛅</p>
                             <p class="text-white">Temp: 81.94 F</p>
                             <p class="text-white mb-0">Humidity: 57%</p>
                         </div>
                         <div class="col bg-primary mr-0 py-3 rounded">
-                            <h3 class="text-white h4 mb-3">8/20/2019</h3>
+                            <h3 id="forecast-d5" class="text-white h4 mb-3"></h3>
                             <p class="mb-2">☀️</p>
                             <p class="text-white">Temp: 83.93 F</p>
                             <p class="text-white mb-0">Humidity: 51%</p>
@@ -88,6 +91,7 @@
             </div>
         </div>
     </div>
+    <script src="assets/scripts/luxon.js"></script>
     <script src="assets/scripts/behaviour.js"></script>
 </body>
 </html>

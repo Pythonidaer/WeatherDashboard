@@ -1,10 +1,33 @@
 $( document ).ready(function() {
-    console.log( "ready!" );
+  // alias luxon object for improved readability
+  let DateTime = luxon.DateTime;
+  let dt = DateTime.local();
+  // Top row dedicated solely to today's weather
+  let todaysDate = `${dt.month}/${dt.day}/${dt.year}`
+  // 5-Day Forecast Dates:
+  let forecastD1 = `${dt.month}/${dt.day + 1}/${dt.year}`
+  let forecastD2 = `${dt.month}/${dt.day + 2}/${dt.year}`
+  let forecastD3 = `${dt.month}/${dt.day + 3}/${dt.year}`
+  let forecastD4 = `${dt.month}/${dt.day + 4}/${dt.year}`
+  let forecastD5 = `${dt.month}/${dt.day + 5}/${dt.year}`
+
+  function headintDates() {
+    // today's weather
+    $('#current-date').text(todaysDate)
+    // 5-Day Forecast Dates:
+    $('#forecast-d1').text(forecastD1)
+    $('#forecast-d2').text(forecastD2)
+    $('#forecast-d3').text(forecastD3)
+    $('#forecast-d4').text(forecastD4)
+    $('#forecast-d5').text(forecastD5)
+  }
+  headintDates();
 
     let cityname = "san francisco";
     let APIKEY = 'c18d5d2e20b21d5580498fa1824aba22';
     let queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + cityname + `&appid=${APIKEY}&units=imperial`;
     // api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}
+
 
     $.ajax({
       url: queryURL,
@@ -21,6 +44,8 @@ $( document ).ready(function() {
     //   need to find UV index
     // need to find weather icon
     });
+
+
     
     $('.btn-city').on('click', function() {
         console.log($(this));
