@@ -4,3 +4,32 @@
     font-size: 1.5rem;
     font-weight: bold;
 }
+
+/* UV Index Scale */
+
+/* 0 to 2: Low */
+.uv-low {
+    background: #299502;
+}
+
+/* 3 to 7: Moderate to High */
+.uv-moderate {
+    background: #F8E400;
+}
+
+.uv-high {
+    background: #F95A00;
+}
+
+/* 8+: Very High to Extreme */
+.uv-very-high {
+    background: #D91011;
+}
+
+.uv-extreme {
+    background: #6C49CB;
+}
+
+.five-day-forecast-img {
+    height: 40px;
+}

@@ -1,4 +1,11 @@
 $( document ).ready(function() {
+  let cityname = "denver";
+  let APIKEY = 'c18d5d2e20b21d5580498fa1824aba22';
+  // api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}
+  let queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + cityname + `&appid=${APIKEY}&units=imperial`;
+  // api.openweathermap.org/data/2.5/forecast?q={city name}&appid={API key}
+  // http://api.openweathermap.org/data/2.5/forecast?q=denver&appid=c18d5d2e20b21d5580498fa1824aba22
+  let weeklyForecast = "https://api.openweathermap.org/data/2.5/forecast?q=" + cityname + `&appid=${APIKEY}&units=imperial`;
   // alias luxon object for improved readability
   let DateTime = luxon.DateTime;
   let dt = DateTime.local();
@@ -10,8 +17,8 @@ $( document ).ready(function() {
   let forecastD3 = `${dt.month}/${dt.day + 3}/${dt.year}`
   let forecastD4 = `${dt.month}/${dt.day + 4}/${dt.year}`
   let forecastD5 = `${dt.month}/${dt.day + 5}/${dt.year}`
-
-  function headintDates() {
+// Function completely covers dates; will need updating based on localStorage items.
+  function headingDates() {
     // today's weather
     $('#current-date').text(todaysDate)
     // 5-Day Forecast Dates:
@@ -21,36 +28,123 @@ $( document ).ready(function() {
     $('#forecast-d4').text(forecastD4)
     $('#forecast-d5').text(forecastD5)
   }
-  headintDates();
+  headingDates();
 
-    let cityname = "san francisco";
-    let APIKEY = 'c18d5d2e20b21d5580498fa1824aba22';
-    let queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + cityname + `&appid=${APIKEY}&units=imperial`;
-    // api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}
-
-
+  // This call writes the cityname, current-weather(temp, humidity), & sends a 2nd AJAX Call for UVIndex all for the top card 
     $.ajax({
       url: queryURL,
       method: "GET"
     }).then(function(response) {
-      console.log(response);
-      console.log("City name: " + response.name);
-    //   need to confirm dt is date time, and how to convert it into something readable or just use dayjs
-    //   console.log(response.dt);
-    // need to see if temp can be converted into farenheight
-      console.log("Temperature Farenheit: " + response.main.temp);
-      console.log("Humidity: " + response.main.humidity);
-      console.log("Wind Speed: " + response.wind.speed);
-    //   need to find UV index
-    // need to find weather icon
+      // console.log(response);
+      $('#city').text(response.name);
+      function todaysWeather() {
+          $('#current-temp').text(response.main.temp);
+          $('#current-humidity').text(response.main.humidity);
+          $('#current-wind-speed').text(response.wind.speed);
+    }
+    todaysWeather();
+          let lat = response.coord.lat;
+          let lon = response.coord.lon;
+            // Current and forecast weather data 
+            //  https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&exclude={part}&appid={API key}
+          let oneCallAPI = "https://api.openweathermap.org/data/2.5/onecall?" + `lat=${lat}&` + `lon=${lon}&` + `appid=${APIKEY}&units=imperial`;
+              $.ajax({
+                url: oneCallAPI,
+                method: "GET"
+              }).then(function(uvIndex) {
+                $('#current-uvi').text(uvIndex.current.uvi);
+                // change UVI background by scale
+                function uvIndexScale() {
+                  let uvScale = $('.uv-scale');
+                  let currentUV = parseFloat($('#current-uvi').text()) // float
+                  if (currentUV < 3) {
+                    uvScale.addClass("uv-low");
+                  } else if (currentUV >= 3 && currentUV < 6) {
+                    uvScale.addClass("uv-moderate");
+                  } else if (currentUV >= 6 && currentUV < 8) {
+                    uvScale.addClass("uv-high");
+                  } else if (currentUV >= 8 && currentUV < 11) {
+                    uvScale.addClass("uv-very-high");
+                  } else if (currentUV >= 11) {
+                    uvScale.addClass("uv-extreme");
+                  };
+                }; 
+                uvIndexScale();
+    // $('.btn-city').on('click', function() {
+    //     console.log($(this));
+    // });
+  });
     });
-
-
     
-    $('.btn-city').on('click', function() {
-        console.log($(this));
-    })
+  // This SECOND Call grabs the weather-icon based on weather description, 5-day forecast temp, and humidityh, 
+    $.ajax({
+      url: weeklyForecast,
+      method: "GET"
+    }).then(function(response) {
+      // http://openweathermap.org/img/wn/04n@2x.png
+      /*
+      WEATHER CONDITION CODES: https://openweathermap.org/weather-conditions#Weather-Condition-Codes-2
+        Main: clouds - 03d
+        Main: clear - 01d
+        Main: Mist/Smoke/Haze/Dust/Fog/Sand/Dust/Ash/Squall/Tornado - 50d
+        Main: snow - 13d
+        Main: Rain - 10d
+        Main: Drizzle - 09d
+        Main: Thunderstorm - 11d
+      THE BELOW IF-conditional WORKS FINE FOR THE FIRST IMAGE, BUT IT IS NOT DYNAMIC
+      */
+      function setWeatherIcons() {
+        let dayIconsURL = "http://openweathermap.org/img/wn/";
+        let weatherDescArr = [
+        response.list[3].weather[0].main,
+        response.list[11].weather[0].main,
+        response.list[19].weather[0].main,
+        response.list[27].weather[0].main,
+        response.list[35].weather[0].main
+        ];
+        let day = 1;
+        for (let i = 0; i < weatherDescArr.length; i++) {
+          if (weatherDescArr[i] === "Clouds") {
+            $(`#img-d${day}`).attr('src', dayIconsURL + '03d@2x.png');
+          } else if (weatherDescArr[i] === "Clear") {
+            $(`#img-d${day}`).attr('src', dayIconsURL + '01d@2x.png');
+          } else if (weatherDescArr[i] === "Snow") {
+            $(`#img-d${day}`).attr('src', dayIconsURL + '13d@2x.png');
+          } else if (weatherDescArr[i] === "Rain") {
+            $(`#img-d${day}`).attr('src', dayIconsURL + '10d@2x.png');
+          } else if (weatherDescArr[i] === "Drizzle") {
+            $(`#img-d${day}`).attr('src', dayIconsURL + '09d@2x.png');
+          } else if (weatherDescArr[i] === "Thunderstorm") {
+            $(`#img-d${day}`).attr('src', dayIconsURL + '11d@2x.png');
+          } else {
+            $(`#img-d${day}`).attr('src', dayIconsURL + '50d@2x.png');
+          }
+          day++;
+        }
+      }
+      setWeatherIcons();
 
+      // 5 day forecast, Temp: & Humidity:
+      function fiveDayForecast() {
+        // Current day + 1 12:00:00
+        $('#temp-d1').text(response.list[3].main.temp);
+        $('#humidity-d1').text(response.list[3].main.humidity);
+        // Current day + 2 12:00:00
+        $('#temp-d2').text(response.list[11].main.temp);
+        $('#humidity-d2').text(response.list[11].main.humidity);
+        // Current day + 3 12:00:00
+        $('#temp-d3').text(response.list[19].main.temp);
+        $('#humidity-d3').text(response.list[19].main.humidity);
+        // Current day + 4 12:00:00
+        $('#temp-d4').text(response.list[27].main.temp);
+        $('#humidity-d4').text(response.list[27].main.humidity);
+        // Current day + 5 12:00:00
+        $('#temp-d5').text(response.list[35].main.temp);
+        $('#humidity-d5').text(response.list[35].main.humidity);
+      }
+      fiveDayForecast();
+    });
+});
 
 // I want to next complete an AJAX request that console logs a response
 /*
@@ -83,31 +177,3 @@ That response must include:
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-});
