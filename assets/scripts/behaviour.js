@@ -1,4 +1,8 @@
 $( document ).ready(function() {
+  let searchInput = $('#search-input');
+  let searchBtn = $('#search-btn')
+  let searchArr = [];
+  let searchList = $('#search-list');
   let cityname = "denver";
   let APIKEY = 'c18d5d2e20b21d5580498fa1824aba22';
   // api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}
@@ -29,6 +33,42 @@ $( document ).ready(function() {
     $('#forecast-d5').text(forecastD5)
   }
   headingDates();
+
+  // Make submit button take value, add it to an array, clear screen, and make a button, then add to storage
+  searchBtn.on('click', function(event) {
+    event.preventDefault();
+
+    // Does not work
+    // getCityBtn();
+    // function getCityBtn() {
+    //   var searchArrParsed = JSON.parse(localStorage.getItem("cities"));
+    //   for (let i = 0; i < searchArrParsed.length; i++) {
+    //     let citySearch = $(`<button>${searchArrParsed[0]}</button>`).addClass('btn btn-outline-secondary bg-white w-100');
+    //     searchList.prepend(citySearch);
+    //     searchArrParsed = [];
+    //   }
+    // }
+
+    let savedSearch = searchInput.val();
+
+    function storeCityBtn() {
+      localStorage.setItem("cities", JSON.stringify(searchArr));
+    }
+    
+    function createCityBtn() {
+      searchArr.unshift(savedSearch);
+      searchInput.val('');
+      // console.log(searchArr);
+      let citySearch = $(`<button>${searchArr[0]}</button>`).addClass('btn btn-outline-secondary bg-white w-100');
+      searchList.prepend(citySearch);
+      storeCityBtn();
+    }
+
+    if (savedSearch.length !== 0) {
+      createCityBtn();
+    }
+  })
+
 
   // This call writes the cityname, current-weather(temp, humidity), & sends a 2nd AJAX Call for UVIndex all for the top card 
     $.ajax({
@@ -81,17 +121,16 @@ $( document ).ready(function() {
       url: weeklyForecast,
       method: "GET"
     }).then(function(response) {
-      // http://openweathermap.org/img/wn/04n@2x.png
-      /*
-      WEATHER CONDITION CODES: https://openweathermap.org/weather-conditions#Weather-Condition-Codes-2
+      // weatherDescArr is a collection of the returned object's 5-day 12pm forecast weather main "descriptions"
+      // WEATHER CONDITION CODES: https://openweathermap.org/weather-conditions#Weather-Condition-Codes-2
+      /* Each "description" 
         Main: clouds - 03d
         Main: clear - 01d
-        Main: Mist/Smoke/Haze/Dust/Fog/Sand/Dust/Ash/Squall/Tornado - 50d
         Main: snow - 13d
         Main: Rain - 10d
         Main: Drizzle - 09d
         Main: Thunderstorm - 11d
-      THE BELOW IF-conditional WORKS FINE FOR THE FIRST IMAGE, BUT IT IS NOT DYNAMIC
+        Main: Mist/Smoke/Haze/Dust/Fog/Sand/Dust/Ash/Squall/Tornado - 50d
       */
       function setWeatherIcons() {
         let dayIconsURL = "http://openweathermap.org/img/wn/";
@@ -146,17 +185,7 @@ $( document ).ready(function() {
     });
 });
 
-// I want to next complete an AJAX request that console logs a response
-/*
-That response must include:
-- city name
-- The date (if not, dayjs)
-- Temp (in Farenheit)
-- Humidity
-- Weather icon
-- Wind Speed
-- UV Index (color coded for favorable, moderate, or severe)
-*/
+
 
 // WHEN U OPEN WEATHER DASHBOARD IT POPULATES THE LAST SEARCHED CITY
 // I want to type a query that receives input from the input search and queries based on that q="city"

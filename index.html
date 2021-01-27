@@ -26,16 +26,14 @@
                 <label for="validationDefaultUsername" class=" m-0 py-2 label-fs text-white form-label">Search for a City:</label>
                 <div class="input-group w-75 mb-3">
                     <!-- This word will be added to the ajax queryURL -->
-                    <input type="text" class="form-control" placeholder="Enter a city name" aria-label="Enter a city name" aria-describedby="button-addon2">
+                    <input type="text" class="form-control" placeholder="Enter a city name" aria-label="Enter a city name" id="search-input" aria-describedby="search-btn">
                     <!-- This button when clicked will trigger the event listener -->
-                    <button class="btn btn-primary" type="button" id="button-addon2">
+                    <button class="btn btn-primary" type="button" id="search-btn">
                         <i class="fas fa-search"></i>
                     </button>
                   </div>
-                  <div>
-                    <button type="button" class="btn-city btn btn-outline-secondary bg-white w-100">Salem</button>
-                    <button type="button" class="btn-city btn btn-outline-secondary bg-white w-100">Boston</button>
-                    <button type="button" class="btn-city btn btn-outline-secondary bg-white w-100 mb-3">Denver</button>
+                  <div id="search-list">
+                    <!-- <button type="button" class="btn-city btn btn-outline-secondary bg-white w-100">Salem</button> -->
                   </div>
             </div>
             <!-- I think these two divs should be broken up further due to spacing issues -->
@@ -47,8 +45,8 @@
                         <!-- Which state is this city in? is this? -->
                         <h2 class="mb-4"> <span id="city"></span> (<span id="current-date"></span>)</h2>
                         <p class="mb-4">Temperature: <span id="current-temp"></span> &#176;F</p>
-                        <p class="mb-4">Humidity: <span id="current-humidity">41</span>%</p> 
-                        <p class="mb-4">Wind Speed: <span id="current-wind-speed">4.7</span> MPH</p>
+                        <p class="mb-4">Humidity: <span id="current-humidity"></span>%</p> 
+                        <p class="mb-4">Wind Speed: <span id="current-wind-speed"></span> MPH</p>
                         <p class="mb-4">UV Index: 
                             <span id="current-uvi" class="p-2 uv-scale text-white rounded"></span>
                         </p>
@@ -62,32 +60,32 @@
                         <div class="col bg-primary mr-3 py-3 rounded">
                             <h3 id="forecast-d1" class="text-white h4 mb-3"></h3>
                             <p class="mb-2"><img id="img-d1" class="five-day-forecast-img" src="" alt=""></p>
-                            <p class="text-white">Temp: <span id="temp-d1">86.84</span> &#176;F</p>
-                            <p class="text-white mb-0">Humidity: <span id="humidity-d1">43</span>%</p>
+                            <p class="text-white">Temp: <span id="temp-d1"></span> &#176;F</p>
+                            <p class="text-white mb-0">Humidity: <span id="humidity-d1"></span>%</p>
                         </div>
                         <div class="col bg-primary mr-3 py-3 rounded">
                             <h3 id="forecast-d2" class="text-white h4 mb-3"></h3>
                             <p class="mb-2"><img id="img-d2" class="five-day-forecast-img" src="" alt=""></p>
-                            <p class="text-white">Temp: <span id="temp-d2">91.38</span> &#176;F</p>
-                            <p class="text-white mb-0">Humidity: <span id="humidity-d2">33</span>%</p>
+                            <p class="text-white">Temp: <span id="temp-d2"></span> &#176;F</p>
+                            <p class="text-white mb-0">Humidity: <span id="humidity-d2"></span>%</p>
                         </div>
                         <div class="col bg-primary mr-3 py-3 rounded">
                             <h3 id="forecast-d3" class="text-white h4 mb-3"></h3>
                             <p class="mb-2"><img id="img-d3" class="five-day-forecast-img" src="" alt=""></p>
-                            <p class="text-white">Temp: <span id="temp-d3">88.46</span> &#176;F</p>
-                            <p class="text-white mb-0">Humidity: <span id="humidity-d3">37</span>%</p>
+                            <p class="text-white">Temp: <span id="temp-d3"></span> &#176;F</p>
+                            <p class="text-white mb-0">Humidity: <span id="humidity-d3"></span>%</p>
                         </div>
                         <div class="col bg-primary mr-3 py-3 rounded">
                             <h3 id="forecast-d4" class="text-white h4 mb-3"></h3>
                             <p class="mb-2"><img id="img-d4" class="five-day-forecast-img" src="" alt=""></p>
-                            <p class="text-white">Temp: <span id="temp-d4">81.94</span> &#176;F</p>
-                            <p class="text-white mb-0">Humidity: <span id="humidity-d4">57</span>%</p>
+                            <p class="text-white">Temp: <span id="temp-d4"></span> &#176;F</p>
+                            <p class="text-white mb-0">Humidity: <span id="humidity-d4"></span>%</p>
                         </div>
                         <div class="col bg-primary mr-0 py-3 rounded">
                             <h3 id="forecast-d5" class="text-white h4 mb-3"></h3>
                             <p class="mb-2"><img id="img-d5" class="five-day-forecast-img" src="" alt=""></p>
-                            <p class="text-white">Temp: <span id="temp-d5">83.93</span> &#176;F</p>
-                            <p class="text-white mb-0">Humidity: <span id="humidity-d5">51</span>%</p>
+                            <p class="text-white">Temp: <span id="temp-d5"></span> &#176;F</p>
+                            <p class="text-white mb-0">Humidity: <span id="humidity-d5"></span>%</p>
                         </div>
                     </div>
                 </div>
